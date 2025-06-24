@@ -1,0 +1,62 @@
+body {
+      font-family: Arial, sans-serif;
+      background-color: #fbff00;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      background: white;
+      margin: 0 auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 50px;
+    }
+    
+    h2 {
+      text-align: center;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .message {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+
+     footer {
+      text-align: center;
+      background-color: #333;
+      color: white;
+      padding: 15px;
+      font-size: 14px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }

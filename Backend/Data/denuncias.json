@@ -1,0 +1,28 @@
+[
+  {
+    "tipo": "Físico",
+    "data": "2025-06-03",
+    "local": "sala",
+    "envolvidos": "Chico e Tonha",
+    "descricao": "Chico bateu em Tonha",
+    "id": 1749141988140,
+    "status": "Em Análise"
+  },
+  {
+    "tipo": "Verbal",
+    "data": "2025-06-04",
+    "local": "sala",
+    "envolvidos": "Vanessa e Francisca",
+    "descricao": "Vanessa xingou a Francisca",
+    "id": 1749142952628,
+    "status": "Resolvida"
+  },
+  {
+    "tipo": "Físico",
+    "data": "25555-02-25",
+    "local": "jfjffi",
+    "envolvidos": "kdjjj feufjf",
+    "descricao": "eçloeiifkfm",
+    "id": 1750789505377
+  }
+]

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Painel Escolar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="css/login.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Acesso ao Painel</h2>
+    <form onsubmit="fazerLogin(event)">
+      <label for="usuario">Usuário</label>
+      <input type="text" id="usuario" required>
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" required>
+
+      <button type="submit">Entrar</button>
+
+      <div class="error" id="erroLogin" style="display: none;">Usuário ou senha inválidos.</div>
+    </form>
+  </div>
+
+  <script>
+    async function fazerLogin(e) {
+      e.preventDefault();
+      const usuario = document.getElementById("usuario").value;
+      const senha = document.getElementById("senha").value;
+
+      try {
+        const res = await fetch("http://localhost:3000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ usuario, senha })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem("token", data.token);
+          window.location.href = "painel.html";
+        } else {
+          document.getElementById("erroLogin").style.display = "block";
+        }
+      } catch (err) {
+        document.getElementById("erroLogin").style.display = "block";
+      }
+    }
+  </script>
+  <footer>
+    © 2025 - CETI Profa. Raquel Magalhães. Todos os direitos reservados.
+  </footer>
+</body>
+</html>

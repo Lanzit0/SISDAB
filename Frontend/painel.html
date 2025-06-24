@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Denúncias</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="css/painel.css">
+</head>
+<body>
+  <div class="main">
+  <div class="container">
+    <h2>Painel de Denúncias</h2>
+
+    <div class="filters">
+      <div>
+        <label>Filtrar por tipo:</label><br>
+        <select id="filtroTipo">
+          <option value="">Todos</option>
+          <option value="Físico">Físico</option>
+          <option value="Verbal">Verbal</option>
+          <option value="Virtual">Virtual</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Data mínima:</label><br>
+        <input type="date" id="filtroData">
+      </div>
+    </div>
+    
+    <div class="actions">
+      <button onclick="buscarDenuncias()">Filtrar</button>
+      <button onclick="logout()">Sair</button>
+    </div>
+
+    <ul id="listaDenuncias"></ul>
+  </div>
+
+  <script>
+    async function buscarDenuncias() {
+      const tipo = document.getElementById("filtroTipo").value;
+      const data = document.getElementById("filtroData").value;
+      const token = localStorage.getItem("token");
+
+      const url = new URL("http://localhost:3000/painel");
+      if (tipo) url.searchParams.append("tipo", tipo);
+      if (data) url.searchParams.append("data", data);
+
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const lista = document.getElementById("listaDenuncias");
+      lista.innerHTML = "";
+
+      if (res.ok) {
+        const denuncias = await res.json();
+        if (denuncias.length === 0) {
+          lista.innerHTML = "<li class='no-data'>Nenhuma denúncia encontrada.</li>";
+        } else {
+          denuncias.forEach(d => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <strong>Data:</strong> ${d.data}<br>
+              <strong>Tipo:</strong> ${d.tipo}<br>
+              <strong>Local:</strong> ${d.local}<br>
+              <strong>Descrição:</strong> ${d.descricao}<br>
+              ${d.envolvidos ? `<strong>Envolvidos:</strong> ${d.envolvidos}<br>
+              <strong>Status:</strong>
+              <select onchange="atualizarStatus(${d.id}, this.value)">
+                <option value="Pendente" ${d.status === "Pendente" ? "selected" : ""}>Pendente</option>
+                <option value="Em Análise" ${d.status === "Em Análise" ? "selected" : ""}>Em Análise</option>
+                <option value="Resolvida" ${d.status === "Resolvida" ? "selected" : ""}>Resolvida</option>
+              </select>` : ''}
+            `;
+            lista.appendChild(li);
+          });
+        }
+      } else {
+        lista.innerHTML = "<li class='no-data'>Erro ao buscar denúncias. Login expirado?</li>";
+      }
+    }
+
+    async function atualizarStatus(id, novoStatus) {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`http://localhost:3000/denuncias/${id}/status`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ status: novoStatus })
+  });
+
+  if (!res.ok) {
+    alert("Erro ao atualizar status.");
+  } else {
+    alert("Status atualizado com sucesso!");
+    buscarDenuncias(); // Atualiza a lista após a mudança de status
+  }
+}
+    // Função para fazer logout e redirecionar para a página de login
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+
+    buscarDenuncias(); // busca automática ao abrir
+  </script>
+  </div>
+    <footer>
+      © 2025 - CETI Profa. Raquel Magalhães. Todos os direitos reservados.
+    </footer>
+  
+</body>
+</html>

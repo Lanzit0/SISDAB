@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Denúncia Anônima - Bullying Escolar</title>
+  <link rel="stylesheet" type="text/css" href="css/denuncia.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Denúncia Anônima de Bullying</h2>
+    <form id="reportForm">
+      <label for="tipo">Tipo de ocorrência</label>
+      <select id="tipo" required>
+        <option value="">Selecione</option>
+        <option value="Físico">Bullying Físico</option>
+        <option value="Verbal">Bullying Verbal</option>
+        <option value="Virtual">Bullying Virtual</option>
+        <option value="Outro">Outro</option>
+      </select>
+
+      <label for="data">Data aproximada</label>
+      <input type="date" id="data" required />
+
+      <label for="local">Local (sala, pátio, etc.)</label>
+      <input type="text" id="local" required />
+
+      <label for="envolvidos">Pessoas envolvidas (se souber)</label>
+      <input type="text" id="envolvidos" />
+
+      <label for="descricao">Descrição da situação</label>
+      <textarea id="descricao" rows="5" required></textarea>
+
+      <button type="submit">Enviar Denúncia</button>
+      <div class="message success" id="msgSucesso" style="display:none;">Denúncia enviada com sucesso!</div>
+      <div class="message error" id="msgErro" style="display:none;">Erro ao enviar denúncia.</div>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("reportForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const denuncia = {
+        tipo: document.getElementById("tipo").value,
+        data: document.getElementById("data").value,
+        local: document.getElementById("local").value,
+        envolvidos: document.getElementById("envolvidos").value,
+        descricao: document.getElementById("descricao").value
+      };
+
+      try {
+        const res = await fetch("http://localhost:3000/denuncias", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(denuncia)
+        });
+
+        if (res.ok) {
+          document.getElementById("reportForm").reset();
+          document.getElementById("msgSucesso").style.display = "block";
+          document.getElementById("msgErro").style.display = "none";
+        } else {
+          throw new Error();
+        }
+      } catch (err) {
+        document.getElementById("msgErro").style.display = "block";
+        document.getElementById("msgSucesso").style.display = "none";
+      }
+    });
+  </script>
+  <footer>
+    © 2025 - CETI Profa. Raquel Magalhães. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
